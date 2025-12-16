@@ -31,7 +31,9 @@ st.set_page_config(
 # =====================================================
 @st.cache_data
 def load_data():
-    return pd.read_csv("data/udemy_courses.csv")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(script_dir, "data", "udemy_courses.csv")
+    return pd.read_csv(csv_path)
 
 df = load_data()
 
