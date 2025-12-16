@@ -1,10 +1,33 @@
 import google.generativeai as genai
 import json
 import re
+import os
+import streamlit as st
 from utils.prompt_templates import QUERY_PARSER_PROMPT
 
-# Configure Gemini
-genai.configure(api_key="AIzaSyA6H_TZh2hJFGjw31xIkEe5RlFiZtTU8MA")
+# Configure Gemini with API key from environment or Streamlit secrets
+api_key = None
+
+# Try Streamlit secrets first (for cloud deployment)
+try:
+    api_key = st.secrets.get("GOOGLE_API_KEY")
+except:
+    pass
+
+# Fall back to environment variable
+if not api_key:
+    api_key = os.getenv("GOOGLE_API_KEY")
+
+# If still no key, raise error
+if not api_key:
+    raise ValueError(
+        "GOOGLE_API_KEY not found! "
+        "Please set it in:\n"
+        "- Local: .env file or environment variable\n"
+        "- Cloud: Streamlit Cloud Secrets"
+    )
+
+genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel("gemini-2.5-flash")
 
