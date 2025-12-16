@@ -1,11 +1,14 @@
 import pandas as pd
 import numpy as np
+import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from utils.gemini_utils import parse_query_with_gemini, model
 
-# Load dataset
-df = pd.read_csv("data/udemy_courses.csv")
+# Load dataset using path relative to this script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(script_dir, "data", "udemy_courses.csv")
+df = pd.read_csv(csv_path)
 
 df.drop_duplicates(inplace=True)
 df.fillna("", inplace=True)
